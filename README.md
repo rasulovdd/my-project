@@ -27,7 +27,7 @@ my-project/
 <br/>
 
 # <div align=center>playbook create-user</div>
-## из папки my-procet, создаем пользователя
+## из папки my-project, создаем пользователя
 ```bash
 ansible-playbook playbooks/create-user.yml
 ```
@@ -39,5 +39,15 @@ ansible-playbook playbooks/create-user.yml
 Введите пароль для пользователя:
 confirm Введите пароль для пользователя:
 ```
+<br/>
 
-# <div align=center>playbook removw-user</div>
+# <div align=center>playbook remove-user</div>
+## из папки my-project, удаляем пользователя
+```bash
+ansible-playbook playbooks/remove-user.yml
+```
+## пример:
+```info
+Введите имя пользователя для удаления:: test01
+Удалить домашнюю директорию? (yes/no): [no]: yes
+```
