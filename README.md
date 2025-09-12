@@ -2,11 +2,10 @@
 ## папка ansible
 ## клонировать репозиторий
 ```bash
-git clone https://github.com/rasulovdd/my-project.git
+git clone https://github.com/rasulovdd/my-project.git && cd my-project
 ```
 ## создать свой конфиг и отредактировать
 ```bash
-cd my-project
 cp ansible.cfg.sample ansible.cfg
 nano ansible.cfg
 ```
