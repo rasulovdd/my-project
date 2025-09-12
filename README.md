@@ -23,3 +23,21 @@ my-project/
 ├── ansible.cfg  # конфиг файл
 └── ansible.log  # лог файл
 ```
+---
+<br/>
+
+# <div align=center>playbook create-user</div>
+## из папки my-procet, создаем пользователя
+```bash
+ansible-playbook playbooks/create-user.yml
+```
+## пример:
+```info
+Введите имя пользователя для создания: test03
+Введите SSH-ключ для пользователя: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCpIuThPBVi4FtVVF
+Добавить sudo права? (y/n, по умолчанию n) [n]: y
+Введите пароль для пользователя:
+confirm Введите пароль для пользователя:
+```
+
+# <div align=center>playbook removw-user</div>

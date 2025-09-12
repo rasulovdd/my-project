@@ -7,8 +7,8 @@
       prompt: "Введите имя пользователя для удаления:"
       private: no
     - name: remove_home
-      prompt: "Удалить домашнюю директорию? (true/false):"
-      default: "false"
+      prompt: "Удалить домашнюю директорию? (yes/no):"
+      default: "no"
       private: no
 
   tasks:
@@ -16,7 +16,7 @@
       ansible.builtin.user:
         name: "{{ username }}"
         state: absent
-        remove: "{{ remove_home }}"
+        remove: "{{ remove_home == 'yes' }}"
       register: user_check
 
     - name: Вывод результата операции
@@ -25,10 +25,11 @@
       when: user_check.changed
 
     - name: Удаление пользователя из группы sudo (если был)
-      ansible.builtin.group:
-        name: sudo
+      ansible.builtin.user:
+        name: "{{ username }}"
+        groups: sudo
         state: absent
-        users: "{{ username }}"
+        append: no
       when: user_check.changed
 
     - name: Очистка crontab пользователя
