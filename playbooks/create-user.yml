@@ -1,3 +1,4 @@
+---
 - name: Проверить и создать пользователя на удаленных серверах
   hosts: ubuntu
   become: yes
@@ -9,17 +10,21 @@
       prompt: "Введите SSH-ключ для пользователя"
       private: no
     - name: grant_sudo
-      prompt: "Добавить sudo права? (yes/no, по умолчанию no)"
+      prompt: "Добавить sudo права? (y/n, по умолчанию n)"
       private: no
-      default: "no"
+      default: "n"
+    - name: password
+      prompt: "Введите пароль для пользователя"
+      private: yes
+      confirm: yes  # Требует подтверждения пароля
 
   tasks:
-    - name: Проверить, существует ли уже пользователь
-      ansible.builtin.getent:
-        database: passwd
-        key: "{{ username }}"
-      register: user_exists
-      ignore_errors: yes
+    - name: Проверить существование пользователя
+      ansible.builtin.user:
+        name: "{{ username }}"
+        state: present
+      check_mode: yes
+      register: user_check
 
     - name: Создать пользователя, если его нет
       ansible.builtin.user:
@@ -27,7 +32,8 @@
         state: present
         create_home: yes
         shell: /bin/bash
-      when: user_exists.failed
+        password: "{{ password | password_hash('sha512') }}"  # Хешируем пароль
+      when: user_check.changed
 
     - name: Создать директорию .ssh
       ansible.builtin.file:
@@ -36,7 +42,7 @@
         owner: "{{ username }}"
         group: "{{ username }}"
         mode: '0700'
-      when: user_exists.failed
+      when: user_check.changed
 
     - name: Добавить SSH-ключ для пользователя
       ansible.builtin.copy:
@@ -45,25 +51,23 @@
         owner: "{{ username }}"
         group: "{{ username }}"
         mode: '0600'
-      when: user_exists.failed
+      when: user_check.changed
 
     - name: Добавить пользователя в группу sudo (если требуется)
       ansible.builtin.user:
         name: "{{ username }}"
         groups: sudo
         append: yes
-      when: 
-        - user_exists.failed
-        - grant_sudo == "yes"
+      when:
+        - user_check.changed
+        - grant_sudo == "y"
 
     - name: Сообщить, если пользователь уже существует
       ansible.builtin.debug:
         msg: "Пользователь {{ username }} уже существует"
-      when: user_exists.failed == false
+      when: not user_check.changed
 
     - name: Сообщить о результате создания пользователя
       ansible.builtin.debug:
-        msg: |
-          Пользователь {{ username }} создан успешно
-          Sudo права: {{ 'предоставлены' if grant_sudo == 'yes' else 'не предоставлены' }}
-      when: user_exists.failed
+        msg: "Пользователь {{ username }} создан успешно | Sudo права: {{ 'предоставлены' if grant_sudo == 'y' else 'не предоставлены' }}"
+      when: user_check.changed
