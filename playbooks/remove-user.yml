@@ -1,7 +1,9 @@
 ---
-- name: Удаление пользователя из системы 
+- name: Удаление пользователя из системы Ubuntu
   hosts: "{{ target_group }}"  # Группа из переменной
   become: yes
+  vars:
+    target_group: "{{ target_group }}"  # Группа из переменной
   vars_prompt:
     - name: username
       prompt: "Введите имя пользователя для удаления:"
@@ -21,7 +23,7 @@
 
     - name: Вывод результата операции
       ansible.builtin.debug:
-        msg: "Пользователь {{ username }} успешно удалён"
+        msg: "Пользователь {{ username }} успешно удалён из серверов группы {{ target_group }}"
       when: user_check.changed
 
     - name: Удаление пользователя из группы sudo (если был)

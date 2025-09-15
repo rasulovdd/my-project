@@ -36,7 +36,7 @@ test2 ansible_host=192.168.1.11
 ```
 # запускаем команду из папки my-project
 ```bash
-ansible-playbook playbooks/create-user.yml -l ubuntu
+ansible-playbook playbooks/create-user.yml -e "target_group=ubuntu"
 ```
 ## вот как это выглядит:
 ```info
@@ -53,7 +53,7 @@ confirm Введите пароль для пользователя:
 # <div align=center>playbook remove-user</div>
 ## пример удаления пользователя со всех серверов группы [ubuntu] которые указаны в /inventory/hosts
 ```bash  
-ansible-playbook playbooks/remove-user.yml -l ubuntu
+ansible-playbook playbooks/remove-user.yml -e "target_group=ubuntu"
 ```
 ## вот как это выглядит:
 ```info
