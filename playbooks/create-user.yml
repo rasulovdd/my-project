@@ -1,6 +1,6 @@
 ---
 - name: Проверить и создать пользователя на удаленных серверах
-  hosts: ubuntu
+  hosts: "{{ target_group }}"  # Группа из переменной
   become: yes
   vars_prompt:
     - name: username

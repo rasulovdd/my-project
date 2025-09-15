@@ -1,5 +1,5 @@
 ---
-- hosts: ubuntu
+- hosts: "{{ target_group }}"  # Группа из переменной
   become: yes
   become_method: sudo
   tasks:
