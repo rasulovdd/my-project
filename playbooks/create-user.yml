@@ -2,6 +2,8 @@
 - name: Проверить и создать пользователя на удаленных серверах
   hosts: "{{ target_group }}"  # Группа из переменной
   become: yes
+  vars:
+    target_group: "{{ target_group }}"  # Группа из переменной
   vars_prompt:
     - name: username
       prompt: "Введите имя пользователя для создания"
