@@ -26,11 +26,19 @@ my-project/
 <br/>
 
 # <div align=center>playbook create-user</div>
-## из папки my-project, создаем пользователя
-```bash
-ansible-playbook playbooks/create-user.yml
+## пример создание пользователя на всех серверах группе [ubuntu] которые указаны в /inventory/hosts:
+в файл /inventory/hosts добавляем свои сервера 
+```info
+#пример ubuntu серверов
+[ubuntu]
+test1 ansible_host=192.168.1.10
+test2 ansible_host=192.168.1.11
 ```
-## пример:
+# запускаем команду из папки my-project
+```bash
+ansible-playbook playbooks/create-user.yml -l ubuntu
+```
+## вот как это выглядит:
 ```info
 Введите имя пользователя для создания: test03
 Введите SSH-ключ для пользователя: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCpIuThPBVi4FtVVF
@@ -38,15 +46,18 @@ ansible-playbook playbooks/create-user.yml
 Введите пароль для пользователя:
 confirm Введите пароль для пользователя:
 ```
+
+-----
 <br/>
 
 # <div align=center>playbook remove-user</div>
-## из папки my-project, удаляем пользователя
-```bash
-ansible-playbook playbooks/remove-user.yml
+## пример удаления пользователя со всех серверов группы [ubuntu] которые указаны в /inventory/hosts
+```bash  
+ansible-playbook playbooks/remove-user.yml -l ubuntu
 ```
-## пример:
+## вот как это выглядит:
 ```info
 Введите имя пользователя для удаления:: test01
 Удалить домашнюю директорию? (yes/no): [no]: yes
 ```
+

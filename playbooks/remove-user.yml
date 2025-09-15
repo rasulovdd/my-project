@@ -1,6 +1,6 @@
 ---
-- name: Удаление пользователя из системы Ubuntu
-  hosts: ubuntu
+- name: Удаление пользователя из системы 
+  hosts: "{{ target_group }}"  # Группа из переменной
   become: yes
   vars_prompt:
     - name: username
